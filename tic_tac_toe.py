@@ -9,14 +9,13 @@ def get_move(board, player):
     row = 0
     col = 0
     taken_coordinates = set()
-    row_and_col = ()
     coordinates = input("provide coordinates: ").upper()
     row = coordinates[0]
     col = int(coordinates[1])
-    while coordinates not in {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"} or row_and_col in taken_coordinates:
+    while coordinates not in {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"} or coordinates in taken_coordinates:
         print("Please enter valid coordinates (A1, A2, A3, B1, B2, B3, C1, C2, C3): ")
         coordinates = input("provide coordinates: ").upper()
-        row_and_col = (coordinates[0], int(coordinates[1]))
+        
 
     # while row not in {"a", "b", "c"}:
     #     print("Please enter A, B or C")
@@ -27,8 +26,9 @@ def get_move(board, player):
     # row_and_col = (row, col)
     # while row_and_col not in taken_coordinates:
     #     print("Those coordinates are already taken.")
-    taken_coordinates.add(row_and_col)
-    return print(row_and_col)
+    row_and_col = (coordinates[0], int(coordinates[1]))
+    taken_coordinates.add(coordinates)
+    return row_and_col
 
 
 def get_ai_move(board, player):
@@ -39,7 +39,16 @@ def get_ai_move(board, player):
 
 def mark(board, player, row, col):
     """Marks the element at row & col on the board for player."""
-    pass
+    conv_row = 0
+    if row == "A":
+        conv_row = 0
+    elif row == "B":
+        conv_row = 1
+    elif row == "C":
+        conv_row = 2
+    board[conv_row][col-1] = 'X'
+    return print(board)
+
 
 
 def has_won(board, player):
@@ -67,7 +76,10 @@ def tictactoe_game(mode='HUMAN-HUMAN'):
 
     # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
     print_board(board)
-    row, col = get_move(board, 1)
+    #get_move(board, 1)
+    move = get_move(board, 1)
+    row = move[0]
+    col = move[1]
     mark(board, 1, row, col)
 
     winner = 0
