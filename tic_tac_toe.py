@@ -17,9 +17,7 @@ def get_move(board, player):
         print("Please enter valid coordinates (A1, A2, A3, B1, B2, B3, C1, C2, C3): ")
         coordinates = input("provide coordinates: ").upper()
         row_and_col = (coordinates[0], int(coordinates[1]))
-    # row = input("Row: ").lower()
-    # col = int(input("Col: "))
-    
+
     # while row not in {"a", "b", "c"}:
     #     print("Please enter A, B or C")
     #     row = input("Row: ").lower()
