@@ -9,25 +9,15 @@ def get_move(board, player):
     row = 0
     col = 0
     taken_coordinates = set()
-    coordinates = input("provide coordinates: ").upper()
+    coordinates = input("Provide coordinates: ").upper()
     row = coordinates[0]
     col = int(coordinates[1])
-    while coordinates not in {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"} or coordinates in taken_coordinates:
+    while coordinates not in {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"}:
         print("Please enter valid coordinates (A1, A2, A3, B1, B2, B3, C1, C2, C3): ")
-        coordinates = input("provide coordinates: ").upper()
-        
-
-    # while row not in {"a", "b", "c"}:
-    #     print("Please enter A, B or C")
-    #     row = input("Row: ").lower()
-    # while col not in {1, 2, 3}:
-    #     print("Please enter 1, 2 or 3")
-    #     col = int(input("Col: "))
-    # row_and_col = (row, col)
-    # while row_and_col not in taken_coordinates:
-    #     print("Those coordinates are already taken.")
+        coordinates = input("Provide coordinates: ").upper()
     row_and_col = (coordinates[0], int(coordinates[1]))
     taken_coordinates.add(coordinates)
+    print(taken_coordinates)
     return row_and_col
 
 
@@ -46,14 +36,70 @@ def mark(board, player, row, col):
         conv_row = 1
     elif row == "C":
         conv_row = 2
-    board[conv_row][col-1] = 'X'
-    return print(board)
+    while True:
+        if player % 2 == 0 and board[conv_row][col-1] == '.':
+            board[conv_row][col-1] = 'X'
+            player += 1
+            return player
+        if player % 2 == 1 and board[conv_row][col-1] == '.':
+            board[conv_row][col-1] = '0'
+            player += 1
+            return player
+        elif board[conv_row][col-1] != '.': 
+            print("Those coordinates are occupied, please choose an empty one.")
+            return player
+    #return print(board)
 
-
-
-def has_won(board, player):
-    """Returns True if player has won the game."""
+def rows(board):
+    for i in range(3):
+        x_count = 0
+        o_count = 0
+        for j in range(3):
+            if board[i][j] == "X":
+                x_count += 1
+            elif board[i][j] == "0":
+                o_count += 1
+        if x_count == 3 or o_count == 3:
+            return True
     return False
+
+def cols(board):
+    for i in range(3):
+        x_count = 0
+        o_count = 0
+        for j in range(3):
+            if board[j][i] == "X":
+                x_count += 1
+            elif board[j][i] == "0":
+                o_count += 1
+        if x_count == 3 or o_count == 3:
+            return True
+    return False
+
+def diagonals(board):
+    x_count = 0
+    o_count = 0
+    x_count2 = 0
+    o_count2 = 0
+    for i in range(3):
+        if board[i][i] == "X":
+            x_count += 1
+        elif board[i][i] == "0":
+            o_count += 1
+        if board[i][2-i] == "X":
+            x_count2 += 1
+        elif board[i][2-i] == "0":
+            o_count2 += 1
+    if x_count == 3 or o_count == 3 or x_count2 == 3 or o_count == 3:
+        return True     
+    else:
+        return False
+        
+
+
+def has_won(board, active_player):
+    """Returns True if player has won the game."""
+    return rows(board) or cols(board) or diagonals(board)
 
 
 def is_full(board):
@@ -68,7 +114,7 @@ def print_board(board):
 
 def print_result(winner):
     """Congratulates winner or proclaims tie (if winner equals zero)."""
-    pass
+    print(f"The winner is Player {(winner % 2) + 1}")
 
 
 def tictactoe_game(mode='HUMAN-HUMAN'):
@@ -77,14 +123,16 @@ def tictactoe_game(mode='HUMAN-HUMAN'):
     # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
     print_board(board)
     #get_move(board, 1)
-    move = get_move(board, 1)
-    row = move[0]
-    col = move[1]
-    mark(board, 1, row, col)
-
-    winner = 0
+    active_player = 1
+    while not has_won(board, active_player):       
+        move = get_move(board, 1)
+        row = move[0]
+        col = move[1]
+        active_player = mark(board, active_player, row, col)
+        print(board)
+    winner = active_player
     print_result(winner)
-
+   
 
 def main_menu():
     tictactoe_game('HUMAN-HUMAN')
