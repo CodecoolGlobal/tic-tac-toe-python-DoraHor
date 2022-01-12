@@ -27,15 +27,12 @@ def get_ai_move(board):
     """Returns the coordinates of a valid move for player on board."""
     while True:
         random_row = random.randint(0,2)
-        print(f'Random row: {random_row}')
         random_col = random.randint(0,2)
-        print(f'Random col: {random_col}')
         if board[random_row][random_col] == '.':
             row_and_col = (random_row, random_col)
-            print(f' AI move: {row_and_col}')
+            print(f' AI move: {random_row + 1}, {random_col + 1}')
             return row_and_col
         
-
 
 def mark(board, player, row, col):
     """Marks the element at row & col on the board for player."""
@@ -55,10 +52,15 @@ def mark(board, player, row, col):
             board[conv_row][col-1] = 'X'
             player += 1
             return player
-        elif board[conv_row][col-1] != '.': 
+        elif board[conv_row][col-1] != '.':
             print("\n Those coordinates are occupied, please choose an empty one.")
             return player
-    #return print(board)
+
+
+def aimark(board, row, col, player):
+    board[row][col] = '0'
+    return player
+
 
 def rows(board):
     for i in range(3):
@@ -73,6 +75,7 @@ def rows(board):
             return True
     return False
 
+
 def cols(board):
     for i in range(3):
         x_count = 0
@@ -85,6 +88,7 @@ def cols(board):
         if x_count == 3 or o_count == 3:
             return True
     return False
+
 
 def diagonals(board):
     x_count = 0
@@ -101,10 +105,9 @@ def diagonals(board):
         elif board[i][2-i] == "0":
             o_count2 += 1
     if x_count == 3 or o_count == 3 or x_count2 == 3 or o_count2 == 3:
-        return True     
+        return True
     else:
         return False
-        
 
 
 def has_won(board, active_player):
@@ -164,15 +167,14 @@ def tictactoe_game(mode):
     elif mode == 'HUMAN-AI':
         while not has_won(board, active_player) and not is_full(board):       
             move = get_move(board, 1)
-            #move = get_ai_move(board, player)
             row = move[0]
             col = move[1]
             active_player = mark(board, active_player, row, col)
-            print_board(board)
+            #print_board(board)
             ai_move = get_ai_move(board)
-            ai_row = ai_move[0] + 1
-            ai_col = ai_move[1] + 1
-            active_player = mark(board, active_player, ai_row, ai_col)
+            ai_row = ai_move[0]
+            ai_col = ai_move[1]
+            active_player = aimark(board, ai_row, ai_col, active_player)
             print_board(board)
         if is_full(board) and not has_won(board, active_player):
             winner = 0
