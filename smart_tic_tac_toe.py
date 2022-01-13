@@ -208,9 +208,6 @@ def cols(board):
             return True
     return False
 
-
-
-
 def diagonals(board):
     x_count = 0
     o_count = 0
@@ -314,13 +311,45 @@ def tictactoe_game(mode):
         else:
             winner = active_player + 1
         print_result(winner)
+    elif mode == 'AI-HUMAN':
+        while not has_won(board, active_player) and not is_full(board):
+            ai_move = get_ai_move(board)
+            ai_row = ai_move[0]
+            ai_col = ai_move[1]
+            active_player = aimark(board, ai_row, ai_col, active_player)
+            print_board(board)
+            
+            while active_player % 2 == 1 and not has_won(board, active_player):
+                move = get_move(board, 1)
+                row = move[0]
+                col = move[1]
+                active_player = mark(board, active_player, row, col)
+                print_board(board) 
+            if is_full(board) and not has_won(board, active_player):
+                
+                winner = 0
+                print_result(winner)
+            elif is_full(board) and has_won(board, active_player):
+                
+                winner = active_player
+                print_result(winner)
+            else:    
+                      
+                winner = active_player + 1
+            
+        if is_full(board) and not has_won(board, active_player):
+            winner = 0
+        else:
+            winner = active_player
+        print_result(winner)
     elif mode == 'AI-AI':
         while not has_won(board, active_player) and not is_full(board):           
             ai_move = get_ai_move(board)
             ai_row = ai_move[0]
             ai_col = ai_move[1]
             active_player = aimark(board, ai_row, ai_col, active_player)
-            print_board(board)
+            sleep(2)
+            print_board(board)           
         if is_full(board) and not has_won(board, active_player):
             winner = 0
         else:
@@ -354,21 +383,28 @@ def tictactoe_game(mode):
         else:
             winner = active_player + 1
         print_result(winner)
+    
         
+        
+   
+
 def main_menu():
     mode = input('''How do you want to play?
     - 1 single player
-    - 2 multiplayer
-    - 3 AI against AI
-    - 4 single player against smarter AI 
+    - 2 single player, AI starts
+    - 3 multiplayer
+    - 4 AI against AI
+    - 5 single player against smarter AI 
     ''')
     if mode == "1":
         tictactoe_game('HUMAN-AI')
     elif mode == "2":
-        tictactoe_game('HUMAN-HUMAN')
+        tictactoe_game('AI-HUMAN')
     elif mode == "3":
-        tictactoe_game('AI-AI')
+        tictactoe_game('HUMAN-HUMAN')
     elif mode == "4":
+        tictactoe_game('AI-AI')
+    elif mode == "5":
         tictactoe_game('HUMAN-SMART_AI')
     return mode
 
