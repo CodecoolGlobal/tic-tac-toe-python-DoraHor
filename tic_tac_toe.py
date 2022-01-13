@@ -25,14 +25,17 @@ def get_move(board, player):
 
 def get_ai_move(board):
     """Returns the coordinates of a valid move for player on board."""
-    while True:
-        random_row = random.randint(0,2)
-        random_col = random.randint(0,2)
-        if board[random_row][random_col] == '.':
-            row_and_col = (random_row, random_col)
-            print(f' AI move: {random_row + 1}, {random_col + 1}')
-            return row_and_col
-        
+    if is_full(board):
+        return None
+    else:
+        while True:
+            random_row = random.randint(0,2)
+            random_col = random.randint(0,2)
+            if board[random_row][random_col] == '.':
+                row_and_col = (random_row, random_col)
+                print(f' AI move: {random_row + 1}, {random_col + 1}')
+                return row_and_col
+            
 
 def mark(board, player, row, col):
     """Marks the element at row & col on the board for player."""
@@ -45,20 +48,23 @@ def mark(board, player, row, col):
         conv_row = 2
     while True:
         if player % 2 == 0 and board[conv_row][col-1] == '.':
-            board[conv_row][col-1] = '0'
+            board[conv_row][col-1] = 'X'
             player += 1
             return player
         if player % 2 == 1 and board[conv_row][col-1] == '.':
-            board[conv_row][col-1] = 'X'
+            board[conv_row][col-1] = '0'
             player += 1
             return player
         elif board[conv_row][col-1] != '.':
             print("\n Those coordinates are occupied, please choose an empty one.")
             return player
+            #get_move(board, player)
+            
 
 
 def aimark(board, row, col, player):
     board[row][col] = '0'
+    player += 1
     return player
 
 
@@ -139,10 +145,13 @@ def print_result(winner):
     """Congratulates winner or proclaims tie (if winner equals zero)."""
     if winner == 0:
         print("\n It's a tie! \n")
+        exit()
     elif winner % 2 == 1:
-        print(f"\n 0 has won! \n")
-    else:
         print(f"\n X has won! \n")
+        exit()
+    else:
+        print(f"\n 0 has won! \n")
+        exit()
     
 
 
@@ -151,7 +160,7 @@ def tictactoe_game(mode):
 
     # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
     print_board(board)
-    active_player = 1
+    active_player = 0
     if mode == 'HUMAN-HUMAN':
         while not has_won(board, active_player) and not is_full(board):       
             move = get_move(board, 1)
@@ -165,11 +174,39 @@ def tictactoe_game(mode):
             winner = active_player
         print_result(winner)
     elif mode == 'HUMAN-AI':
-        while not has_won(board, active_player) and not is_full(board):       
-            move = get_move(board, 1)
-            row = move[0]
-            col = move[1]
-            active_player = mark(board, active_player, row, col)
+        while not has_won(board, active_player) and not is_full(board):
+            #active_player = 0      
+            # move = get_move(board, 1)
+            # row = move[0]
+            # col = move[1]
+            # try:
+            #     active_player = mark(board, active_player, row, col)
+            # except TypeError:
+            #     move = get_move(board, 1)
+            #     row = move[0]
+            #     col = move[1]
+            while active_player % 2 == 0:
+                move = get_move(board, 1)
+                row = move[0]
+                col = move[1]
+                active_player = mark(board, active_player, row, col)
+                # except TypeError:
+                #     move = get_move(board, 1)
+                #     row = move[0]
+                #     col = move[1]
+            if is_full(board) and not has_won(board, active_player):
+                print_board(board)
+                winner = 0
+                print_result(winner)
+            elif is_full(board) and has_won(board, active_player):
+                print_board(board)
+                winner = active_player
+                print_result(winner)
+            else:    
+                print_board(board)          
+                #if active_player == None:
+                    #active_player = 0
+                winner = active_player + 1   
             #print_board(board)
             ai_move = get_ai_move(board)
             ai_row = ai_move[0]
@@ -179,7 +216,7 @@ def tictactoe_game(mode):
         if is_full(board) and not has_won(board, active_player):
             winner = 0
         else:
-            winner = active_player
+            winner = active_player + 1
         print_result(winner)
         
    
