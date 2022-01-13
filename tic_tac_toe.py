@@ -58,7 +58,6 @@ def mark(board, player, row, col):
         elif board[conv_row][col-1] != '.':
             print("\n Those coordinates are occupied, please choose an empty one.")
             return player
-            #get_move(board, player)
             
 
 
@@ -157,8 +156,6 @@ def print_result(winner):
 
 def tictactoe_game(mode):
     board = init_board()
-
-    # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
     print_board(board)
     active_player = 0
     if mode == 'HUMAN-HUMAN':
@@ -175,25 +172,11 @@ def tictactoe_game(mode):
         print_result(winner)
     elif mode == 'HUMAN-AI':
         while not has_won(board, active_player) and not is_full(board):
-            #active_player = 0      
-            # move = get_move(board, 1)
-            # row = move[0]
-            # col = move[1]
-            # try:
-            #     active_player = mark(board, active_player, row, col)
-            # except TypeError:
-            #     move = get_move(board, 1)
-            #     row = move[0]
-            #     col = move[1]
             while active_player % 2 == 0:
                 move = get_move(board, 1)
                 row = move[0]
                 col = move[1]
                 active_player = mark(board, active_player, row, col)
-                # except TypeError:
-                #     move = get_move(board, 1)
-                #     row = move[0]
-                #     col = move[1]
             if is_full(board) and not has_won(board, active_player):
                 print_board(board)
                 winner = 0
@@ -204,10 +187,7 @@ def tictactoe_game(mode):
                 print_result(winner)
             else:    
                 print_board(board)          
-                #if active_player == None:
-                    #active_player = 0
                 winner = active_player + 1   
-            #print_board(board)
             ai_move = get_ai_move(board)
             ai_row = ai_move[0]
             ai_col = ai_move[1]
@@ -232,5 +212,3 @@ def main_menu():
 
 if __name__ == '__main__':
     main_menu()
-
-# tie example: a1 a2 a3 b1 b2 c1 c2 c3 b3
