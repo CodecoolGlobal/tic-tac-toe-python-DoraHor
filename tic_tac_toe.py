@@ -38,7 +38,6 @@ def get_ai_move(board):
             random_col = random.randint(0,2)
             if board[random_row][random_col] == '.':
                 row_and_col = (random_row, random_col)
-                print(f" AI's move: {random_row + 1}, {random_col + 1}")
                 return row_and_col
 
 
@@ -253,8 +252,7 @@ def main_menu():
     - 1 single player
     - 2 single player, AI starts
     - 3 multiplayer
-    - 4 AI against AI
-    - 5 single player against smarter AI 
+    - 4 AI against AI 
     ''')
     if mode == "1":
         tictactoe_game('HUMAN-AI')
